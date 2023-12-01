@@ -1,0 +1,23 @@
+{
+    "name": "whateverthing/qed",
+    "description": "Wrapper for BCMath functions",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Whateverthing\\Qed\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kevin Boyd",
+            "email": "kevin.boyd@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "require": {
+        "ext-bcmath": "*"
+    }
+}
