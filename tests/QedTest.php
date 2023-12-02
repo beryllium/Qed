@@ -236,5 +236,7 @@ class QedTest extends TestCase
         yield 'uh oh-' . $precision => ['.123', $precision, PHP_ROUND_HALF_UP, '0.1'];
         yield 'negatory-' . $precision => ['-123.77', $precision, PHP_ROUND_HALF_UP, '-123.8'];
         yield 'negazero-' . $precision => ['-.77', $precision, PHP_ROUND_HALF_UP, '-0.8'];
+
+        yield 'qed-example' . $precision => ['2.6973', 2, PHP_ROUND_HALF_UP, '2.70'];
     }
 }
