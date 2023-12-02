@@ -6,7 +6,10 @@
     "autoload": {
         "psr-4": {
             "Whateverthing\\Qed\\": "src/"
-        }
+        },
+        "files": [
+            "qed_polyfill_functions.php"
+        ]
     },
     "authors": [
         {
