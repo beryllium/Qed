@@ -3,13 +3,13 @@
 if (!function_exists('bcround')) {
     function bcround(string $num1, int $precision = 0, int $mode = PHP_ROUND_HALF_UP): string
     {
-        $symbol = substr($num1, 0, 1) === '-' ? '-' : '';
+        $sign = substr($num1, 0, 1) === '-' ? '-' : '';
         $num1 = ltrim($num1, '-');
 
         $decimalPos = strpos($num1, '.');
 
         if (false === $decimalPos) {
-            return $symbol . $num1;
+            return $sign . $num1;
         }
 
         $number = substr($num1, 0, $decimalPos);
@@ -18,41 +18,41 @@ if (!function_exists('bcround')) {
 
         if ($precision == 0) {
             if ((int) $remainder >= 5) {
-                return $symbol . bcadd($number, '1');
+                return $sign . bcadd($number, '1');
             }
 
-            return $symbol . ($number ?: '0');
+            return $sign . ($number ?: '0');
         }
 
         if ((int) $remainder >= 5) {
             $decimal = bcadd($decimal, '1');
         }
 
-        return $symbol . ($number ?: 0) . '.' . $decimal;
+        return $sign . ($number ?: 0) . '.' . $decimal;
     }
 }
 
 if (!function_exists('bcceil')) {
     function bcceil(string $num): string
     {
-        $symbol = substr($num, 0, 1) === '-' ? '-' : '';
+        $sign = substr($num, 0, 1) === '-' ? '-' : '';
         $num = ltrim($num, '-');
 
         $decimalPos = strpos($num, '.');
 
         if (false === $decimalPos) {
-            return $symbol . $num;
+            return $sign . $num;
         }
 
         $output = substr($num, 0, $decimalPos) ?: '0';
 
-        if ($symbol === '-') {
-            return $symbol . $output;
+        if ($sign === '-') {
+            return $sign . $output;
         }
 
         $remainder = substr($num, $decimalPos);
         if (bccomp($remainder, '0', 100) === '1') {
-            return $symbol . $output;
+            return $sign . $output;
         }
 
         return bcadd($output, '1');
@@ -62,17 +62,17 @@ if (!function_exists('bcceil')) {
 if (!function_exists('bcfloor')) {
     function bcfloor(string $num): string
     {
-        $symbol = substr($num, 0, 1) === '-' ? '-' : '';
+        $sign = substr($num, 0, 1) === '-' ? '-' : '';
         $num = ltrim($num, '-');
 
         $decimalPos = strpos($num, '.');
 
         if (false === $decimalPos) {
-            return $symbol . $num;
+            return $sign . $num;
         }
 
         $output = substr($num, 0, $decimalPos) ?: '0';
 
-        return $symbol . $output;
+        return $sign . $output;
     }
 }
