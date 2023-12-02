@@ -64,7 +64,7 @@ class Qed
      * NOTE: May have some odd thoughts on whether -0 is less than 0
      *
      * @param string|Qed $rightOperand
-     * @return $this
+     * @return static
      */
     public function comp(string|Qed $rightOperand): static
     {
@@ -88,7 +88,7 @@ class Qed
      *
      * @param string|Qed $exponent
      * @param string|Qed $modulus
-     * @return $this
+     * @return static
      */
     public function powmod(string|Qed $exponent, string|Qed $modulus): static
     {
@@ -111,7 +111,7 @@ class Qed
      * NOTE: This *DOES NOT* call the bcscale() method to set system-wide scale value.
      *
      * @param int|string|Qed|null $scale    Set the scale factor; Null returns current scale factor as Qed object
-     * @return $this
+     * @return static
      */
     public function scale(null|int|string|Qed $scale = null): static
     {
@@ -128,5 +128,29 @@ class Qed
         }
 
         return new static($this->value, $scale);
+    }
+
+    public function floor(): static
+    {
+        return new Qed(bcfloor($this->value), $this->scale);
+    }
+
+    public function ceil(): static
+    {
+        return new Qed(bcceil($this->value), $this->scale);
+    }
+
+    /**
+     * Rounds a Qed number to the provided position, possibly using the provided PHP RoundHalf setting
+     *
+     * NOTE: Current polyfill implementation ignores PHP RoundHalf setting unless system bcround() is present
+     *
+     * @param int $precision    Digits of precision after the decimal point
+     * @param int $roundHalf    Directionality of rounding processes
+     * @return static
+     */
+    public function round(int $precision = 0, int $roundHalf = PHP_ROUND_HALF_UP): static
+    {
+        return new Qed(bcround($this->value, $precision, $roundHalf), $this->scale);
     }
 }
