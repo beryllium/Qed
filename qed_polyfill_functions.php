@@ -35,25 +35,24 @@ if (!function_exists('bcround')) {
 if (!function_exists('bcceil')) {
     function bcceil(string $num): string
     {
+        $symbol = substr($num, 0, 1) === '-' ? '-' : '';
+        $num = ltrim($num, '-');
+
         $decimalPos = strpos($num, '.');
 
         if (false === $decimalPos) {
-            return $num;
+            return $symbol . $num;
         }
 
         $output = substr($num, 0, $decimalPos) ?: '0';
 
-        if ($output == '-') {
-            return '-0';
-        }
-
-        if (strpos($output, '-') === 0) {
-            return $output;
+        if ($symbol === '-') {
+            return $symbol . $output;
         }
 
         $remainder = substr($num, $decimalPos);
         if (bccomp($remainder, '0', 100) === '1') {
-            return $output;
+            return $symbol . $output;
         }
 
         return bcadd($output, '1');
@@ -63,18 +62,17 @@ if (!function_exists('bcceil')) {
 if (!function_exists('bcfloor')) {
     function bcfloor(string $num): string
     {
+        $symbol = substr($num, 0, 1) === '-' ? '-' : '';
+        $num = ltrim($num, '-');
+
         $decimalPos = strpos($num, '.');
 
         if (false === $decimalPos) {
-            return $num;
+            return $symbol . $num;
         }
 
         $output = substr($num, 0, $decimalPos) ?: '0';
 
-        if ($output == '-') {
-            return '-0';
-        }
-
-        return $output;
+        return $symbol . $output;
     }
 }
