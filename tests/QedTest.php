@@ -163,4 +163,78 @@ class QedTest extends TestCase
         $num = $num->scale(5);
         $this->assertSame('5', $num->scale()->value);
     }
+
+    /**
+     * @dataProvider floorProvider
+     */
+    public function testFloor($number, $expected): void
+    {
+        $num = new Qed($number);
+
+        $this->assertSame($expected, $num->floor()->value);
+    }
+
+    public static function floorProvider()
+    {
+        yield '123' => ['123.77', '123'];
+        yield 'uh oh' => ['.123', '0'];
+        yield 'negatory' => ['-123.77', '-123'];
+        yield 'negazero' => ['-.77', '-0'];
+    }
+
+    /**
+     * @dataProvider ceilProvider
+     */
+    public function testCeil($number, $expected): void
+    {
+        $num = new Qed($number);
+
+        $this->assertSame($expected, $num->ceil()->value);
+    }
+
+    public static function ceilProvider()
+    {
+        yield '123' => ['123.77', '124'];
+        yield 'uh oh' => ['.123', '1'];
+        yield 'negatory' => ['-123.77', '-123'];
+        yield 'negazero' => ['-.77', '-0'];
+    }
+
+    /**
+     * @dataProvider roundProvider
+     */
+    public function testRound($number, $precision, $roundHalf, $expected): void
+    {
+        $num = new Qed($number);
+
+        $this->assertSame($expected, $num->round($precision, $roundHalf)->value);
+    }
+
+    public static function roundProvider()
+    {
+        $precision = 0;
+        yield 'nada' => ['123', $precision, PHP_ROUND_HALF_UP, '123'];
+        yield 'nada-0' => ['123.0000', $precision, PHP_ROUND_HALF_UP, '123'];
+
+        yield '123-up' => ['123.37', $precision, PHP_ROUND_HALF_UP, '123'];
+        yield '123-down' => ['123.37', $precision, PHP_ROUND_HALF_DOWN, '123'];
+        yield '123-even' => ['123.37', $precision, PHP_ROUND_HALF_EVEN, '123'];
+        yield '123-odd' => ['123.37', $precision, PHP_ROUND_HALF_ODD, '123'];
+
+        yield '124-p0' => ['123.77', $precision, PHP_ROUND_HALF_UP, '124'];
+        yield 'uh oh' => ['.123', $precision, PHP_ROUND_HALF_UP, '0'];
+        yield 'negatory' => ['-123.77', $precision, PHP_ROUND_HALF_UP, '-124'];
+        yield 'negazero' => ['-.77', $precision, PHP_ROUND_HALF_UP, '-1'];
+
+        $precision = 1;
+        yield '123-' . $precision . '-up' => ['123.37', $precision, PHP_ROUND_HALF_UP, '123.4'];
+        yield '123-' . $precision . '-down' => ['123.37', $precision, PHP_ROUND_HALF_DOWN, '123.4'];
+        yield '123-' . $precision . '-even' => ['123.37', $precision, PHP_ROUND_HALF_EVEN, '123.4'];
+        yield '123-' . $precision . '-odd' => ['123.37', $precision, PHP_ROUND_HALF_ODD, '123.4'];
+
+        yield '124-' . $precision => ['123.77', $precision, PHP_ROUND_HALF_UP, '123.8'];
+        yield 'uh oh-' . $precision => ['.123', $precision, PHP_ROUND_HALF_UP, '0.1'];
+        yield 'negatory-' . $precision => ['-123.77', $precision, PHP_ROUND_HALF_UP, '-123.8'];
+        yield 'negazero-' . $precision => ['-.77', $precision, PHP_ROUND_HALF_UP, '-0.8'];
+    }
 }
