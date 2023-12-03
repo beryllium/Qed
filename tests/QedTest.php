@@ -143,6 +143,28 @@ class QedTest extends TestCase
         $this->assertEquals('-1', $numberOne->comp('456')->value);
     }
 
+    public function testChain_DivMul(): void
+    {
+        $num = new Qed('123', 5);
+        $div = new Qed('456');
+
+        $expected = '2.69730';
+        $actual = $num->div($div)->mul('10');
+
+        $this->assertSame($expected, $actual->value);
+    }
+
+    public function testChain_DivMulRound(): void
+    {
+        $num = new Qed('123', 10);
+        $div = new Qed('456');
+
+        $expected = '2.70';
+        $actual = $num->div($div)->mul('10')->round(2);
+
+        $this->assertSame($expected, $actual->value);
+    }
+
     public function testScale(): void
     {
         $num = new Qed('1');

@@ -30,7 +30,8 @@ class Qed
         }
 
         return new Qed(
-            $action($this->value, $rightOperand->value, $this->scale)
+            $action($this->value, $rightOperand->value, $this->scale),
+            $this->scale
         );
     }
 
@@ -141,12 +142,12 @@ class Qed
     }
 
     /**
-     * Rounds a Qed number to the provided position, possibly using the provided PHP RoundHalf setting
+     * Rounds a Qed number to the provided precision, using the provided PHP RoundHalf mode setting
      *
-     * NOTE: Current polyfill implementation ignores PHP RoundHalf setting unless system bcround() is present
+     * NOTE: Current polyfill implementation is not fully sound and should not be relied on
      *
      * @param int $precision    Digits of precision after the decimal point
-     * @param int $roundHalf    Directionality of rounding processes
+     * @param int $roundHalf    Directionality of rounding processes, from PHP_ROUND_HALF_*
      * @return static
      */
     public function round(int $precision = 0, int $roundHalf = PHP_ROUND_HALF_UP): static

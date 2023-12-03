@@ -1,12 +1,15 @@
 Qed by Whateverthing
 ====================
 
-Qed (pronounced "ked") is a wrapper for BCMath functionality.
+Qed (pronounced "ked") provides method chaining on BCMath operations, allowing
+you to write smoother and more readable calculation code.
 
-It uses method chaining to allow operations to flow from previous operations.
+Qed also includes polyfill functions for `bcround`, `bcceil`, and `bcfloor`,
+which have official implementations coming in
+[a future PHP release](https://wiki.php.net/rfc/adding_bcround_bcfloor_bcceil_to_bcmath).
 
-Qed also provides polyfill functions for `bcround`, `bcceil`, and `bcfloor`,
-which are coming in [a future PHP release](https://wiki.php.net/rfc/adding_bcround_bcfloor_bcceil_to_bcmath).
+(Note that Qed's polyfills are not guaranteed to be mathematically sound. Please
+don't use them for anything even the slightest bit important.)
 
 ## Example
 
@@ -28,11 +31,11 @@ scale is not set to a suitable value.
 Scale may be a bit different than precision. For more information, see the [bcscale() documentation](https://www.php.net/manual/en/function.bcscale.php) on the PHP website.
 
 ```php
-$num = new Qed('123', 10);
+$num = new Qed('123', 5);
 $divisor = new Qed('456');
 $num = $num->div($divisor)->mul('10');
 
-echo $num->value; // 2.6973
+echo $num->value; // 2.69730
 ```
 
 Note that the scale follows the left-side of the flow. If a `Qed` object is
@@ -60,6 +63,5 @@ object will have the same scale value as the originating instance, the precision
 value is only applied to the internals of `bcround`.
 
 There is a second parameter, `$roundHalf`, which can be one of the
-`PHP_ROUND_HALF_*` constants. These are currently ignored in the polyfill, but
-will be functional in the future. See [php.net/round](https://www.php.net/round)
+`PHP_ROUND_HALF_*` constants. See [php.net/round](https://www.php.net/round)
 for more information about how they are expected to work.
