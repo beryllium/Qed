@@ -187,6 +187,105 @@ class QedTest extends TestCase
     }
 
     /**
+     * Calculations with larger numbers
+     */
+
+    public function bigNumCalc_Add(): void
+    {
+        $num = new Qed('987654321');
+        $this->assertEquals('999999999', $num->add('12345678')->value);
+
+    }
+
+    public function bigNumCalc_Sub(): void
+    {
+        $num = new Qed('1');
+        $this->assertEquals('-987654320', $num->sub('987654321')->value);
+    }
+
+    public function bigNumCalc_Mul(): void
+    {
+        $num = new Qed('123456789');
+        $this->assertEquals('121932631112635269', $num->mul('987654321')->value);
+    }
+
+    public function bigNumCalc_Div(): void
+    {
+        $num = new Qed('7878787878');
+        $this->assertEquals('101010101', $num->div('78')->value);
+    }
+
+    public function bigNumCalc_Mod(): void
+    {
+        $num = new Qed('745634322');
+        $this->assertEquals('8', $num->mod('17')->value);
+    }
+
+    /**
+     * Calculations with large chains of operations
+     */
+
+    public function largeChainCalc_1(): void
+    {
+        $num = new Qed('177', 4);
+        $num = $num->add('51')->mod('64')->mod('3')->mul('189')->mul('182121221');
+        $this->assertEquals('0.0000', $num->div('67')->value);
+    }
+
+    public function largeChainCalc_2(): void
+    {
+        $num = new Qed('465', 4);
+        $num = $num->add('89')->mod('27')->mod('6')->mul('18')->mul('21183');
+        $this->assertEquals('16946.4', $num->div('45')->value);
+    }
+
+    public function largeChainCalc_3(): void
+    {
+        $num = new Qed('344', 4);
+        $num = $num->mul('8')->div('123')->add('64')->mul('2')->mul('2343')->mod('38')->mul('23');
+        $this->assertEquals('463.2195', $num->add('222')->value);
+    }
+
+    public function largeChainCalc_4(): void
+    {
+        $num = new Qed('15', 3);
+        $num = $num->mul('7')->div('7')->mul('4')->div('4')->mul('3')->div('3')->mul('8')->div('8')->mul('3')->div('3')->mul('4')->div('4')->mul('6')->div('6');
+        $this->assertEquals('3', $num->mod('4')->value);
+    }
+
+    /**
+     * Same calculation with differing scales (for precision)
+     */
+
+    public function specificPrecCalc_3Dec(): void
+    {
+        $num = new Qed('80', 3);
+        $num = $num->div('7')->mul('5')->div('4');
+        $this->assertEquals('0.840', $num->div('17')->value);
+    }
+
+    public function specificPrecCalc_4Dec(): void
+    {
+        $num = new Qed('80', 4);
+        $num = $num->div('7')->mul('5')->div('4');
+        $this->assertEquals('0.8403', $num->div('17')->value);
+    }
+
+    public function specificPrecCalc_5Dec(): void
+    {
+        $num = new Qed('80', 5);
+        $num = $num->div('7')->mul('5')->div('4');
+        $this->assertEquals('0.84034', $num->div('17')->value);
+    }
+
+    public function specificPrecCalc_6Dec(): void
+    {
+        $num = new Qed('80', 6);
+        $num = $num->div('7')->mul('5')->div('4');
+        $this->assertEquals('0.840336', $num->div('17')->value);
+    }
+
+    /**
      * @dataProvider floorProvider
      */
     public function testFloor($number, $expected): void
